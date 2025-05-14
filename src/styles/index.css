@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   transition: background-color 0.3s ease;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: "Roboto Condensed", sans-serif;
 }
 
 body.dark-body {
@@ -12,4 +12,19 @@ body.dark-body {
 
 .bg-dark {
   background-color: #363a46;
+}
+
+.badge-success {
+  background: #0bd18a;
+  box-shadow: #0bd18a4d 0px 6px 20px;
+}
+
+.badge-error {
+  background: #fc6161;
+  box-shadow: #fc61614c 0px 6px 20px;
+}
+
+.custom-timeline.p-timeline.p-timeline-vertical .p-timeline-event-opposite {
+  flex: 0;
+  padding: 0;
 }
