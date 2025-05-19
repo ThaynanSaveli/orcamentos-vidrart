@@ -11,6 +11,14 @@ body.dark-body {
   color: #ffffff;
 }
 
+.bg-box-infos {
+  background-color: #2a2d39;
+}
+
+.bg-box-infos-light {
+  background-color: #f1f1f1;
+}
+
 .bg-dark {
   background-color: #363a46;
 }
