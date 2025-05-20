@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { Timeline } from 'primereact/timeline';
 
 import { ProgressBar } from 'primereact/progressbar';
+import React from 'react';
 
 export const Dashboard = () => {
   const { theme } = useTheme();
@@ -304,10 +305,10 @@ export const Dashboard = () => {
                 <div className={`card relative shadow-1 h-6rem border-round-xl p-3 mb-2 ${theme === 'lara-dark-blue' ? 'bg-dark' : 'bg-white'}`}>
                   <span className="text-sm font-medium line-height-1">META DE FATURAMENTO</span>
                   <div className="flex align-items-center">
-                    <div className="flex justify-content-center align-items-center h-2rem w-5rem border-round-md p-2 mr-3 badge-success">
-                      <i className="pi pi-arrow-up w-2rem"></i><span className="line-height-2">1.5%</span>
+                    <div className="flex justify-content-center align-items-center h-2rem w-5rem border-round-md p-2 mr-3 badge-disponivel">
+                      <i className="pi pi-arrow-up w-2rem"></i><span className="line-height-2">70.005%</span>
                     </div>
-                    <div className="line-height-4 text-4xl">R$ 20.938.829,98</div>
+                    <div className="line-height-4 text-4xl"> <span className="text-3xl">R$ 630.053,80</span> - <b>R$ 900.000,00</b></div>
                   </div>
                 </div>
                 <ProgressBar value={70} style={{ height: '15px' }}/>
@@ -316,7 +317,7 @@ export const Dashboard = () => {
                 <div className={`card relative shadow-1 h-6rem border-round-xl p-3 mb-2 ${theme === 'lara-dark-blue' ? 'bg-dark' : 'bg-white'}`}>
                   <span className="text-sm font-medium line-height-1">TOTAL PLANOS VENDIDOS</span>
                   <div className="flex align-items-center">
-                    <div className="flex justify-content-center align-items-center h-2rem w-5rem border-round-md p-2 mr-3 badge-success">
+                    <div className="flex justify-content-center align-items-center h-2rem w-5rem border-round-md p-2 mr-3 badge-disponivel">
                       <i className="pi pi-arrow-up w-2rem"></i><span className="line-height-2">1.5%</span>
                     </div>
                     <div className="line-height-4 text-4xl">3</div>
@@ -327,7 +328,7 @@ export const Dashboard = () => {
                 <div className={`card relative shadow-1 h-6rem border-round-xl p-3 mb-2 ${theme === 'lara-dark-blue' ? 'bg-dark' : 'bg-white'}`}>
                   <span className="text-sm font-medium line-height-1">VALOR PLANOS VENDIDOS</span>
                   <div className="flex align-items-center">
-                    <div className="line-height-4 text-3xl">R$ 3.726,96</div>
+                    <div className="line-height-4 text-3xl">R$ 5.000,96</div>
                   </div>
                 </div>
               </div>
@@ -335,7 +336,10 @@ export const Dashboard = () => {
                 <div className={`card relative shadow-1 h-6rem border-round-xl p-3 mb-2 ${theme === 'lara-dark-blue' ? 'bg-dark' : 'bg-white'}`}>
                   <span className="text-sm font-medium line-height-1">TAXA CHRUN</span>
                   <div className="flex align-items-center">
-                    <div className="line-height-4 text-3xl">R$ 1.893,92</div>
+                    <div className="flex justify-content-center align-items-center h-2rem w-5rem border-round-md p-2 mr-3 badge-error">
+                      <i className="pi pi-arrow-down w-2rem"></i><span>1.5%</span>
+                    </div>
+                    <div className="line-height-4 text-4xl">3</div>
                   </div>
                 </div>
               </div>
@@ -435,19 +439,7 @@ export const Dashboard = () => {
             <Chart type="line" data={lineData} options={lineChartOptions} />
           </div>
         </div>
-
-        {/* <div className="col-12 md:col-5">
-          <div className={`card shadow-1 p-3 border-round-md ${theme === 'lara-dark-blue' ? 'bg-dark' : 'bg-white'}`}>
-            <h3 className="mb-3 mt-0">Gráfico 2</h3>
-            <Chart type="bar" data={barHorizontalData} options={barHorizontalOptions} />
-          </div>
-        </div>
-        <div className="col-12 md:col-7">
-          <div className={`card shadow-1 p-3 border-round-md ${theme === 'lara-dark-blue' ? 'bg-dark' : 'bg-white'}`}>
-            <h3 className="mb-3 mt-0">Gráfico 2</h3>
-            <Chart type="bar" data={barData} />
-          </div>
-        </div> */}
+      
       </div>
     </div>
   );
