@@ -23,15 +23,51 @@ body.dark-body {
   background-color: #363a46;
 }
 
-.badge-success {
+.badge-disponivel {
   background: #0bd18a;
   box-shadow: #0bd18a4d 0px 6px 20px;
+}
+
+.badge-acaminho {
+  background: #dfcf43;
+  box-shadow: #dfcf434d 0px 6px 20px;
+}
+
+.badge-passageiro {
+  background: #00adff;
+  box-shadow: #00adff4d 0px 6px 20px;
+}
+
+.badge-indisponivel {
+  background: #b3b3b3;
+  box-shadow: #b3b3b34d 0px 6px 20px;
 }
 
 .badge-error {
   background: #fc6161;
   box-shadow: #fc61614c 0px 6px 20px;
 }
+
+.badge-agendamento-atrasado {
+  background: #e25252;
+  box-shadow: #fb04044c 0px 6px 20px;
+}
+
+.badge-agendamento-20-min {
+  background: #e043db;
+  box-shadow: #fd0df54c 0px 6px 20px;
+}
+
+.badge-agendamento-40-min {
+  background: #e9a659;
+  box-shadow: #fb8a094c 0px 6px 20px;
+}
+
+.badge-agendamento-120-min {
+  background: #6967f0;
+  box-shadow: #6967f04c 0px 6px 20px;
+}
+
 
 .custom-timeline.p-timeline.p-timeline-vertical .p-timeline-event-opposite {
   flex: 0;
