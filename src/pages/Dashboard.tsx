@@ -2,9 +2,7 @@ import { Chart } from 'primereact/chart';
 import { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Timeline } from 'primereact/timeline';
-
 import { ProgressBar } from 'primereact/progressbar';
-import React from 'react';
 
 export const Dashboard = () => {
   const { theme } = useTheme();
@@ -108,7 +106,7 @@ export const Dashboard = () => {
 
   const usuarioMarkerHistory = (item: any) => {
     return (
-      <span className='custom-marker border-circle p-1 w-2rem h-2rem flex justify-content-center align-items-center' style={{ background: item.color }}>
+      <span className='custom-marker border-circle p-1 w-2rem h-2rem flex justify-content-center align-items-center text-white' style={{ background: item.color }}>
         <i className={`${item.icon}`}></i>
       </span>
     )
@@ -117,7 +115,7 @@ export const Dashboard = () => {
 
   const agendamentoMarkerHistory = (item: any) => {
     return (
-      <span className='custom-marker border-circle p-1 w-2rem h-2rem flex justify-content-center align-items-center' style={{ background: item.color }}>
+      <span className='custom-marker border-circle p-1 w-2rem h-2rem flex justify-content-center align-items-center text-white' style={{ background: item.color }}>
         <i className={`${item.icon}`}></i>
       </span>
     )
@@ -147,6 +145,14 @@ export const Dashboard = () => {
       </>
     )
   }
+
+  const valueTemplate = (value: any) => {
+      return (
+          <>
+            R$ 630.053,80
+          </>
+      );
+  };
 
   return (
     <div className="p-2">
@@ -311,7 +317,7 @@ export const Dashboard = () => {
                     <div className="line-height-4 text-4xl"> <span className="text-3xl">R$ 630.053,80</span> - <b>R$ 900.000,00</b></div>
                   </div>
                 </div>
-                <ProgressBar value={70} style={{ height: '15px' }}/>
+                <ProgressBar value={70} displayValueTemplate={valueTemplate} style={{ height: '15px' }}/>
               </div>
               <div className="col-12 md:col-4">
                 <div className={`card relative shadow-1 h-6rem border-round-xl p-3 mb-2 ${theme === 'lara-dark-blue' ? 'bg-dark' : 'bg-white'}`}>
