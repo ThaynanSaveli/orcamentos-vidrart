@@ -1,10 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useTheme } from '../context/ThemeContext';
-import { Timeline } from 'primereact/timeline';
-import { ProgressBar } from 'primereact/progressbar';
-import { SplitButton } from 'primereact/splitbutton';
-import { Skeleton } from 'primereact/skeleton';
-import { LoadingListSkeleton } from '../components/LoadingListSkeleton';
+import { useState } from 'react';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
@@ -12,7 +6,6 @@ import { Button } from 'primereact/button';
 import { addLocale } from 'primereact/api';
 
 export const Dashboard = () => {
-  const { theme } = useTheme();
   const [date, setDate] = useState<Date | null>(new Date());
 
   addLocale('pt', {
@@ -81,7 +74,7 @@ export const Dashboard = () => {
                     </div>
                     <div className='w-100'>
                       <label>Quantidade</label>
-                      <InputText className='mt-2' placeholder="Quantidade" />
+                      <InputText className='mt-2' placeholder="Quantidade" value={item.quantidade} />
                     </div>
                     <div className='w-100'>
                       <label>Altura</label>
