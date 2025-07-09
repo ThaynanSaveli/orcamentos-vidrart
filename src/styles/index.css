@@ -68,6 +68,9 @@ body.dark-body {
   box-shadow: #6967f04c 0px 6px 20px;
 }
 
+.w-100 {
+  width: 100%;
+}
 
 .custom-timeline.p-timeline.p-timeline-vertical .p-timeline-event-opposite {
   flex: 0;

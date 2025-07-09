@@ -1,4 +1,3 @@
-import { Chart } from 'primereact/chart';
 import { useEffect, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { Timeline } from 'primereact/timeline';
@@ -6,186 +5,121 @@ import { ProgressBar } from 'primereact/progressbar';
 import { SplitButton } from 'primereact/splitbutton';
 import { Skeleton } from 'primereact/skeleton';
 import { LoadingListSkeleton } from '../components/LoadingListSkeleton';
+import { TabView, TabPanel } from 'primereact/tabview';
+import { InputText } from 'primereact/inputtext';
+import { Calendar } from 'primereact/calendar';
+import { Button } from 'primereact/button';
+import { addLocale } from 'primereact/api';
 
 export const Dashboard = () => {
   const { theme } = useTheme();
-  const [loadingStatusMotoristas, setLoadingStatusMotoristas] = useState<boolean>(false)
-  const [loadingAgendamentos, setLoadingAgendamentos] = useState<boolean>(false)
-  const [loadingInfosMesAtual, setLoadingInfosMesAtual] = useState<boolean>(false)
+  const [date, setDate] = useState<Date | null>(new Date());
 
-  const [taxaAtualizacaoStatusMotoristas, setTaxaAtualizacaoStatusMotoristas] = useState<number>(60)
-  const [taxaAtualizacaoAgendamentos, setTaxaAtualizacaoAgendamentos] = useState<number>(30)
-  const [taxaAtualizacaoInfosMesAtual, setTaxaAtualizacaoInfosMesAtual] = useState<number>(120)
-
-  const motoristas = [
-    { nome: 'Igor', status: 'Disponível', localizacao: 'VIX Logística - Matriz, Vitoria - ES', icon: 'pi pi-user', color: '#0bd18a', image: 'game-controller.jpg' },
-    { nome: 'Sheimon', status: 'Disponível', localizacao: 'VIX Logística - Matriz, Vitoria - ES', icon: 'pi pi-user', color: '#0bd18a', image: 'game-controller.jpg' },
-    { nome: 'Brenno', status: 'Disponível', localizacao: 'VIX Logística - Matriz, Vitoria - ES', icon: 'pi pi-user', color: '#0bd18a', image: 'game-controller.jpg' },
-    { nome: 'William', status: 'Com Passageiro', localizacao: 'Av. Fernando Ferrari, 3073 - Goiabeiras', icon: 'pi pi-user', color: '#00adff', image: 'game-controller.jpg' },
-    { nome: 'Lauro', status: 'Com Passageiro', localizacao: 'Av. Prof. Fernando Duarte Rabelo - Maria Ortiz, Vitória - ES', icon: 'pi pi-user', color: '#00adff', image: 'game-controller.jpg' },
-    { nome: 'Thaynan', status: 'Com Passageiro', localizacao: 'Av. José Moreira Martins Rato, 1328 - Conj. Carapina I, Serra - ES', icon: 'pi pi-user', color: '#00adff', image: 'game-controller.jpg' }
-  ];
-
-  const agendamentos = [
-    { passageiro: 'Lucas Andrade', origem: 'Av. Marechal Mascarenhas de Moraes, 2100 - Bento Ferreira, Vitória - ES', destino: 'Rua José Teixeira, 55 - Praia do Canto, Vitória - ES', Estimativa: '14 min', date: '20/05/2025 10:30', icon: 'pi pi-clipboard', color: '#fc6161', image: 'game-controller.jpg' },
-    { passageiro: 'Ana Paula Souza', origem: 'Rua Eugênio Netto, 200 - Santa Lúcia, Vitória - ES', destino: 'Av. Saturnino de Brito, 1000 - Praia do Canto, Vitória - ES', Estimativa: '10 min', date: '20/05/2025 16:00', icon: 'pi pi-clipboard', color: '#e043db', image: 'game-controller.jpg' },
-    { passageiro: 'Carlos Eduardo Lima', origem: 'Av. Leitão da Silva, 1500 - Itararé, Vitória - ES', destino: 'Rua Aleixo Neto, 400 - Praia do Suá, Vitória - ES', Estimativa: '12 min', date: '20/05/2025 16:15', icon: 'pi pi-clipboard', color: '#e043db', image: 'game-controller.jpg' },
-    { passageiro: 'Fernanda Ribeiro', origem: 'Rua Humberto Martins de Paula, 80 - Jardim Camburi, Vitória - ES', destino: 'Av. Fernando Ferrari, 1050 - Goiabeiras, Vitória - ES', Estimativa: '8 min', date: '21/05/2025 10:00', icon: 'pi pi-clipboard', color: '#e043db', image: 'game-controller.jpg' },
-    { passageiro: 'Bruno Martins', origem: 'Rua José Alves, 300 - Maruípe, Vitória - ES', destino: 'Rua Sete de Setembro, 900 - Centro, Vitória - ES', Estimativa: '30 min', date: '21/05/2025 10:00', icon: 'pi pi-clipboard', color: '#e9a659', image: 'game-controller.jpg' },
-    { passageiro: 'Juliana Castro', origem: 'Av. Adalberto Simão Nader, 150 - Mata da Praia, Vitória - ES', destino: 'Rua Dona Maria Rosa, 45 - Ilha do Boi, Vitória - ES', Estimativa: '15 min', date: '21/05/2025 10:00', icon: 'pi pi-clipboard', color: '#e9a659', image: 'game-controller.jpg' }
-  ];
-
-  let lineChartOptions = {
-    maintainAspectRatio: false,
-    aspectRatio: 0.6,
-  }
-  const [lineData] = useState({
-    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'],
-    datasets: [
-      {
-        label: 'Motoristas',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        fill: false,
-        tension: 0.4,
-        borderColor: '#d4f542'
-      },
-      {
-        label: 'Vendas',
-        data: [32, 44, 73, 81, 97, 102, 98],
-        fill: false,
-        tension: 0.4,
-        borderColor: '#42A5F5'
-      },
-      {
-        label: 'Cancelamento',
-        data: [12, 16, 9, 21, 27, 31, 6],
-        fill: false,
-        tension: 0.4,
-        borderColor: '#962424'
-      },
-      {
-        label: 'Faturamento',
-        data: [12, 24, 70, 99, 85, 92, 104],
-        fill: false,
-        tension: 0.4,
-        borderColor: '#399e1a'
-      },
-    ]
+  addLocale('pt', {
+    firstDayOfWeek: 1,
+    dateFormat: 'dd/mm/yy',
+    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    today: 'Hoje',
+    clear: 'Limpar'
   });
 
-  const usuarioMarkerHistory = (item: any) => {
-    return (
-      <span className='custom-marker border-circle p-1 w-2rem h-2rem flex justify-content-center align-items-center text-white' style={{ background: item.color }}>
-        <i className={`${item.icon}`}></i>
-      </span>
-    )
+  const [itensOrcamento, setItensOrcamento] = useState<any[]>([])
+
+  function handleAdicionarItemOrcamento() {
+    let arr = [...itensOrcamento]
+    arr.unshift({
+      tipoProduto: 1,
+      quantidade: 1,
+      altura: 1,
+      largura: 1,
+      espessura: 1,
+      maoDeObra: 0,
+    })
+    setItensOrcamento(arr)
   }
-
-  const agendamentoMarkerHistory = (item: any) => {
-    return (
-      <span className='custom-marker border-circle p-1 w-2rem h-2rem flex justify-content-center align-items-center text-white' style={{ background: item.color }}>
-        <i className={`${item.icon}`}></i>
-      </span>
-    )
-  }
-
-  const usuarioContentHistory = (item: any) => {
-    return (
-      <>
-        <div className='flex align-items-center justify-content-between'>
-          <p className='m-0 text-sm'>{item.nome}</p>
-          <h6 className='m-0 text-sm'>{item.status}</h6>
-        </div>
-        <span className='text-sm text-color-secondary'>{item.localizacao}</span>
-      </>
-    )
-  }
-
-  const agendamentoContentHistory = (item: any) => {
-    return (
-      <>
-        <div className='flex align-items-center justify-content-between m-0'>
-          <p className='text-sm font-bold text-color-secondary mt-0 mb-1'><b>{item.passageiro}</b> - {item.date}</p>
-        </div>
-          <p className='m-0 text-sm'>{item.origem}</p>
-          <p className='m-0 text-sm'>{item.destino}</p>
-        <br />
-      </>
-    )
-  }
-
-  const valorFaturamento = () => {
-    return (
-      <>
-        R$ 630.053,80
-      </>
-    );
-  };
-
-  const generateUpdateOptions = (onSelect: (seconds: number) => void) => [
-    {
-      label: 'A cada 30 segundos',
-      command: () => onSelect(30),
-    },
-    {
-      label: 'A cada 1 minuto',
-      command: () => onSelect(60),
-    },
-    {
-      label: 'A cada 2 minutos',
-      command: () => onSelect(120),
-    },
-    {
-      label: 'A cada 3 minutos',
-      command: () => onSelect(180),
-    },
-  ];
-
-  const atualizarStatusMotoristas = () => {
-    setLoadingStatusMotoristas(true)
-    setTimeout(() => {
-      setLoadingStatusMotoristas(false)
-    }, 2000)
-  };
-
-  const atualizarAgendamentos = () => {
-    setLoadingAgendamentos(true)
-    setTimeout(() => {
-      setLoadingAgendamentos(false)
-    }, 2000)
-  };
-
-  const atualizarInfosMesAtual = () => {
-    setLoadingInfosMesAtual(true)
-    setTimeout(() => {
-      setLoadingInfosMesAtual(false)
-    }, 2000)
-  };
-
-  useEffect(() => {
-    atualizarStatusMotoristas()
-    atualizarAgendamentos()
-    atualizarInfosMesAtual()
-  }, [])
-
-  useEffect(() => {
-    const interval = setInterval(atualizarStatusMotoristas, taxaAtualizacaoStatusMotoristas * 1000);
-    return () => clearInterval(interval);
-  }, [taxaAtualizacaoStatusMotoristas]);
-
-  useEffect(() => {
-    const interval = setInterval(atualizarAgendamentos, taxaAtualizacaoAgendamentos * 1000);
-    return () => clearInterval(interval);
-  }, [taxaAtualizacaoAgendamentos]);
-
-  useEffect(() => {
-    const interval = setInterval(atualizarInfosMesAtual, taxaAtualizacaoInfosMesAtual * 1000);
-    return () => clearInterval(interval);
-  }, [taxaAtualizacaoInfosMesAtual]);
 
   return (
     <div className="p-2">
-      <div className="grid">
+      <TabView>
+        <TabPanel header="Orçamentos" leftIcon="pi pi-file-plus mr-2">
+          <div className="card flex flex-column md:flex-row gap-3">
+            <div className='w-100'>
+              <label>Nome do cliente</label>
+              <div className="p-inputgroup flex-1 mt-2">
+                <span className="p-inputgroup-addon">
+                  <i className="pi pi-user"></i>
+                </span>
+                <InputText placeholder="Nome do cliente" />
+              </div>
+            </div>
+            <div className='w-100'>
+              <label>Data do orçamento</label>
+              <div className="p-inputgroup flex-1 mt-2">
+                <span className="p-inputgroup-addon">
+                  <i className="pi pi-calendar"></i>
+                </span>
+                <Calendar value={date} onChange={(e) => setDate(e.value ?? null)} locale="pt" />
+              </div>
+            </div>
+          </div>
+
+          <div className='mt-5'>
+            <div className='text-center'>
+              <Button size='small' icon="pi pi-cart-plus" label="Adicionar produto" onClick={handleAdicionarItemOrcamento} />
+            </div>
+            <div className='mt-4'>
+              {
+                itensOrcamento.map((item) => (
+                  <div className='flex gap-2 w-100 mt-3'>
+                    <div className='w-100'>
+                      <label>Tipo de produto</label>
+                      <InputText className='mt-2' placeholder="Produto" />
+                    </div>
+                    <div className='w-100'>
+                      <label>Quantidade</label>
+                      <InputText className='mt-2' placeholder="Quantidade" />
+                    </div>
+                    <div className='w-100'>
+                      <label>Altura</label>
+                      <InputText className='mt-2' placeholder="Altura" />
+                    </div>
+                    <div className='w-100'>
+                      <label>Largura</label>
+                      <InputText className='mt-2' placeholder="Largura" />
+                    </div>
+                    <div className='w-100'>
+                      <label>Espessura</label>
+                      <InputText className='mt-2' placeholder="Espessura" />
+                    </div>
+                    <div className='w-100'>
+                      <label>Valor da mão de obra</label>
+                      <InputText className='mt-2' placeholder="Valor da mão de obra" />
+                    </div>
+                    <div className='flex gap-2 align-items-end'>
+                      <Button size='small' icon="pi pi-check" severity='success' aria-label="Filter" style={{ height: '40px'}} />
+                      <Button size='small' icon="pi pi-times" severity="danger" aria-label="remove" style={{ height: '40px'}} />
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div className='flex justify-content-center gap-3 mt-5'>
+            <Button icon="pi pi-user" label="Gerar Orçamento" severity="success" />
+          </div>
+        </TabPanel>
+        <TabPanel header="Calculadora de Materiais" rightIcon="pi pi-calculator ml-2">
+          <p className="m-0">
+            Aba de calculadora dos materiais
+          </p>
+        </TabPanel>
+      </TabView>
+      {/* <div className="grid">
         <div className='col-12 md:col-8'>
           <div className="grid">
             <div className="col-12 md:col-6">
@@ -686,7 +620,7 @@ export const Dashboard = () => {
           </div>
         </div>
       
-      </div>
+      </div> */}
     </div>
   );
 };
