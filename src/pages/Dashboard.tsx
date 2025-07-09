@@ -114,7 +114,7 @@ export const Dashboard = () => {
     )
   }
 
-  const valorFaturamento = (value: any) => {
+  const valorFaturamento = () => {
     return (
       <>
         R$ 630.053,80
