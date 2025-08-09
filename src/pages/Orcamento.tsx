@@ -35,7 +35,7 @@ export const Orcamento = () => {
 
   function handleAdicionarItemOrcamento() {
     let arr = [...itensOrcamento]
-    arr.push({
+    arr.unshift({
       id: uuidv4(),
       grupo: null,
       tipoProduto: null,
@@ -57,6 +57,8 @@ export const Orcamento = () => {
       valorTotalUnitario: 0,
       valorTotal: 0,
     })
+
+    console.log('arr', arr)
     setItensOrcamento(arr)
   }
 
@@ -92,18 +94,17 @@ export const Orcamento = () => {
   };
 
   const handleGerarOrcamento = () => {
-    console.log('itensOrcamento', itensOrcamento)
-    // if (nomeCliente === '') {
-    //   ToastService.showError('Erro', 'Preencha o nome do cliente');
-    //   return
-    // }
+    if (nomeCliente === '') {
+      ToastService.showError('Erro', 'Preencha o nome do cliente');
+      return
+    }
 
-    // gerarPDFOrcamento(itensOrcamento, TIPOS_VIDRO, {
-    //   nome: 'Vidrarte Vidraçaria',
-    //   endereco: 'Av. Linhares, 258 - Praia Grande - Fundão/ES',
-    //   telefone: '(27) 99625-9769',
-    //   email: ' vidrartevidracariaes@gmail.com',
-    // }, nomeCliente, date ?? new Date(), porcentagemDescontoPix, qtdVezesParcelamento, valorDescontoManual);
+    gerarPDFOrcamento(itensOrcamento, {
+      nome: 'Vidrarte Vidraçaria',
+      endereco: 'Av. Linhares, 258 - Praia Grande - Fundão/ES',
+      telefone: '(27) 99625-9769',
+      email: ' vidrartevidracariaes@gmail.com',
+    }, nomeCliente, date ?? new Date(), porcentagemDescontoPix, qtdVezesParcelamento, valorDescontoManual);
   };
 
 
@@ -136,17 +137,15 @@ export const Orcamento = () => {
             <div className='text-center'>
               <Button size='small' icon="pi pi-cart-plus" label="Adicionar produto" onClick={handleAdicionarItemOrcamento} />
             </div>
-            <div className='mt-4'>
-              {
-                itensOrcamento.map((item, index) => (
-                  <ItemOrcamento 
-                    key={`item-orcamento-${index}`} 
-                    item={item} 
-                    removerItem={handleRemoverItemOrcamento}
-                    atualizarItem={handleAtualizarItemOrcamento}
-                  />
-                ))
-              }
+            <div className='grid mt-4 container-itens-orcamento'>
+              {itensOrcamento.map((item) => (
+                <ItemOrcamento
+                  key={item.id}
+                  item={item}
+                  removerItem={handleRemoverItemOrcamento}
+                  atualizarItem={handleAtualizarItemOrcamento}
+                />
+              ))}
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import type { IItemOrcamento } from '../models/IItemOrcamento';
+import { TIPOS_VIDRO } from '../constants';
 
 (pdfMake as any).vfs = pdfFonts.vfs;
 
@@ -15,7 +16,6 @@ interface DadosEmpresa {
 
 export const gerarPDFOrcamento = (
   itens: IItemOrcamento[],
-  produtosDisponiveis: any[],
   dadosEmpresa: DadosEmpresa,
   nomeUsuario: string,
   dataSelecionada: Date,
@@ -24,7 +24,7 @@ export const gerarPDFOrcamento = (
   valorDescontoManual: number
 ) => {
   const nomeArquivo = `Orcamento_${nomeUsuario.replace(/\s+/g, '_')}_${dataSelecionada.toISOString().split('T')[0]}.pdf`;
-  const produtosMap = new Map(produtosDisponiveis.map(p => [p.id, p.descricao]));
+  const produtosMap = new Map(TIPOS_VIDRO.map(p => [p.id, p.descricao]));
 
   const bodyTabela = [
     [
@@ -38,7 +38,7 @@ export const gerarPDFOrcamento = (
       const valorUnitario = item.maoDeObra;
       const valorFinal = valorUnitario * item.quantidade;
       return [
-        produtosMap.get(item.tipoProduto?.toString()) || 'Produto desconhecido',
+        produtosMap.get(item.tipoProduto ?? 0) || 'Produto desconhecido',
         item.quantidade.toString(),
         `${item.altura} x ${item.largura}`,
         `R$ ${valorUnitario.toFixed(2)}`,
@@ -48,7 +48,7 @@ export const gerarPDFOrcamento = (
   ];
 
   const valorTotal = itens.reduce((acc, item) => (acc + item.maoDeObra * item.quantidade) - valorDescontoManual, 0);
-  const valorPix = valorTotal * (100 - porcentagemDescontoPix);
+  const valorPix = valorTotal * ((100 - porcentagemDescontoPix) * 0.01);
   const valorParcelado = valorTotal / parseInt(qtdVezesParcelamento);
 
   const docDefinition: any = {
@@ -86,10 +86,10 @@ export const gerarPDFOrcamento = (
         style: 'total',
       },
       {
-        text: `Pagamento via PIX ou dinheiro (5% desconto): R$ ${valorPix.toFixed(2)}`,
+        text: `Pagamento via PIX ou dinheiro (${porcentagemDescontoPix}% desconto): R$ ${valorPix.toFixed(2)}`,
       },
       {
-        text: `Parcelado em até ${qtdVezesParcelamento}x no cartão: 3x de R$ ${valorParcelado.toFixed(2)}`,
+        text: `Parcelado em até ${qtdVezesParcelamento}x no cartão: ${qtdVezesParcelamento}x de R$ ${valorParcelado.toFixed(2)}`,
         margin: [0, 0, 0, 20],
       },
       {

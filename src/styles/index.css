@@ -72,8 +72,30 @@ body.dark-body {
   width: 100%;
 }
 
+.container-itens-orcamento {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-top: 15px;
+}
+
 .p-autocomplete-input, .p-inputnumber-input {
   width: 100%;
+}
+
+.p-card {
+  background: #394453;
+  height: 100%;
+}
+
+.p-card .p-card-title {
+  font-size: 1.23rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.p-card-content {
+  padding: 0px;
 }
 
 .custom-timeline.p-timeline.p-timeline-vertical .p-timeline-event-opposite {
