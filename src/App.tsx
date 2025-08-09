@@ -1,6 +1,6 @@
 import { Toast } from 'primereact/toast';
 import { Header } from './components/Header';
-import { Dashboard } from './pages/Dashboard';
+import { Orcamento } from './pages/Orcamento';
 import { ToastService } from './services/toast';
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <div>
       <Toast ref={(el) => ToastService.setRef(el)} />
       <Header />
-      <Dashboard />
+      <Orcamento />
     </div>
   );
 }

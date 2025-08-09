@@ -13,15 +13,18 @@
     "axios": "^1.9.0",
     "chart.js": "^4.4.9",
     "classnames": "^2.5.1",
+    "pdfmake": "^0.2.20",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.5",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
     "@types/node": "^22.15.21",
+    "@types/pdfmake": "^0.2.11",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",

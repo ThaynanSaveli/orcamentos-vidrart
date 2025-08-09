@@ -72,6 +72,10 @@ body.dark-body {
   width: 100%;
 }
 
+.p-autocomplete-input, .p-inputnumber-input {
+  width: 100%;
+}
+
 .custom-timeline.p-timeline.p-timeline-vertical .p-timeline-event-opposite {
   flex: 0;
   padding: 0;
