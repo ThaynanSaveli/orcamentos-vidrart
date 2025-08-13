@@ -1,7 +1,7 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import type { IItemOrcamento } from '../models/IItemOrcamento';
-import { TIPOS_VIDRO } from '../constants';
+import { TIPOS_GRUPO, TIPOS_VIDRO } from '../constants';
 
 (pdfMake as any).vfs = pdfFonts.vfs;
 
@@ -24,7 +24,6 @@ export const gerarPDFOrcamento = (
   valorDescontoManual: number
 ) => {
   const nomeArquivo = `Orcamento_${nomeUsuario.replace(/\s+/g, '_')}_${dataSelecionada.toISOString().split('T')[0]}.pdf`;
-  const produtosMap = new Map(TIPOS_VIDRO.map(p => [p.id, p.descricao]));
 
   const bodyTabela = [
     [
@@ -35,19 +34,20 @@ export const gerarPDFOrcamento = (
       { text: 'Valor Total', style: 'tableHeader' },
     ],
     ...itens.map(item => {
-      const valorUnitario = item.maoDeObra;
-      const valorFinal = valorUnitario * item.quantidade;
+      const grupoItem = TIPOS_GRUPO.find(p => p.id === item.grupo)
+      const vidroItem = TIPOS_VIDRO.find(p => p.id === item.tipoProduto)
+
       return [
-        produtosMap.get(item.tipoProduto ?? 0) || 'Produto desconhecido',
+        `${grupoItem.descricao} - ${vidroItem?.descricao}` || 'Produto desconhecido',
         item.quantidade.toString(),
         `${item.altura} x ${item.largura}`,
-        `R$ ${valorUnitario.toFixed(2)}`,
-        `R$ ${valorFinal.toFixed(2)}`,
+        `R$ ${item.valorTotalUnitario.toFixed(2)}`,
+        `R$ ${item.valorTotal.toFixed(2)}`,
       ];
     }),
   ];
 
-  const valorTotal = itens.reduce((acc, item) => (acc + item.maoDeObra * item.quantidade) - valorDescontoManual, 0);
+  const valorTotal = itens.reduce((acc, item) => (acc + item.valorTotal) - valorDescontoManual, 0);
   const valorPix = valorTotal * ((100 - porcentagemDescontoPix) * 0.01);
   const valorParcelado = valorTotal / parseInt(qtdVezesParcelamento);
 
