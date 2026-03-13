@@ -13,8 +13,17 @@ export const calcularValorTela = (largura: number): number => {
   return Math.round(valor * 100) / 100
 }
 
-export const calcularValorFinalTela = (params: IParamsCalculoTela): number => {
-  // let valorAluminio = calcularValorAluminioJanela(params.altura, params.largura, params.multiplicadorAltura, params.multiplicadorLargura)
+export const calcularTributacaoTela = (valorEstrutura: number, valorTela: number, valorMaoDeObra: number): number => {
+  let valor = (valorEstrutura + valorTela + valorMaoDeObra) * 0.06
 
-  return 0
+  return Math.round(valor * 100) / 100
+}
+
+export const calcularValorFinalTela = (params: IParamsCalculoTela): number => {
+  let valorEstrutura = calcularValorEstruturaTela(params.altura, params.largura)
+  let valorTela = calcularValorTela(params.largura)
+  let valorTributos = calcularTributacaoTela(valorEstrutura, valorTela, params.maoDeObra)
+  let somaTotal = valorEstrutura + valorTela + valorTributos + params.maoDeObra + params.valorDeslocamento
+
+  return Math.ceil(somaTotal)
 }

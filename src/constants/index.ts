@@ -309,42 +309,42 @@ export const TIPOS_JANELA: ITipoJanela[] = [
 export const TIPOS_ESQUADRIA: ITipoEsquadria[] = [
   {
     id: 1,
-    descricao: 'J2 SUPREMA',
+    descricao: 'J2 Suprema',
     constanteCalculo: 690
   },
   {
     id: 2,
-    descricao: 'J4 SUPREMA',
+    descricao: 'J4 Suprema',
     constanteCalculo: 730
   },
   {
     id: 3,
-    descricao: 'J6 SUPREMA',
+    descricao: 'J6 Suprema',
     constanteCalculo: 780
   },
   {
     id: 4,
-    descricao: 'JANELA + FIXO/MAXIN-AR SUPREMA',
+    descricao: 'Janela + Fixo/MAXIN-AR Suprema',
     constanteCalculo: 750
   },
   {
     id: 5,
-    descricao: 'P2 SUPREMA',
+    descricao: 'P2 Suprema',
     constanteCalculo: 750
   },
   {
     id: 6,
-    descricao: 'P3 SUPREMA',
+    descricao: 'P3 Suprema',
     constanteCalculo: 780
   },
   {
     id: 7,
-    descricao: 'P4 SUPREMA',
+    descricao: 'P4 Suprema',
     constanteCalculo: 780
   },
   {
     id: 8,
-    descricao: 'P6 SUPREMA',
+    descricao: 'P6 Suprema',
     constanteCalculo: 830
   },
   {
@@ -354,7 +354,7 @@ export const TIPOS_ESQUADRIA: ITipoEsquadria[] = [
   },
   {
     id: 10,
-    descricao: 'PORTA GIRO',
+    descricao: 'Porta Giro',
     constanteCalculo: 950
   },
 ]
@@ -362,7 +362,7 @@ export const TIPOS_ESQUADRIA: ITipoEsquadria[] = [
 export const TIPOS_TELA: IProdutoPadrao[] = [
   {
     id: 1,
-    descricao: 'TELA',
+    descricao: 'Tela',
   }
 ]
 

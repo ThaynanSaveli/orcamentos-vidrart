@@ -84,10 +84,6 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                       if (e.value) {
                         setTipoProdutoSelecionado(e.value)
                         handleChange('tipoProduto', e.value.id);
-
-                        if (typeof e.value === 'object' && e.value.produtos.length === 1) {
-                          setProdutoSelecionado(e.value.produtos[0])
-                        }
                       }
                     }}
                   />
