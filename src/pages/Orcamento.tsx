@@ -91,6 +91,30 @@ export const Orcamento = () => {
         novoItem.valorTotal = valorFinal * novoItem.quantidade
         break
 
+      case ProdutoTipo.PORTACORRER:
+        let produtoSelecionadoPortaCorrer = tipoProdutoSelecionado?.produtos.filter((x) => x.id === novoItem.produto)[0]
+        let valorFinalPortaCorrer = tipoProdutoSelecionado.functionCalcularValorFinal({
+          altura: novoItem.altura,
+          largura: novoItem.largura,
+          maoDeObra: novoItem.maoDeObra,
+          valorPc: novoItem.pc,
+          valorDeslocamento: novoItem.deslocamento,
+          valorPainel: novoItem.alturaPainel,
+          valorPlotagem: novoItem.plotagem,
+          constanteMultiplicadora: produtoSelecionadoPortaCorrer.constanteMultiplicadora,
+          constanteSomadoraAltura: produtoSelecionadoPortaCorrer.constanteSomadoraAltura,
+          constanteSomadoraLargura: produtoSelecionadoPortaCorrer.constanteSomadoraLargura,
+          custoVidro: produtoSelecionadoPortaCorrer.custoVidro,
+          valorFerragem: produtoSelecionadoPortaCorrer.valorFerragem,
+          multiplicadorAltura: produtoSelecionadoPortaCorrer.multiplicadorAltura,
+          multiplicadorLargura: produtoSelecionadoPortaCorrer.multiplicadorLargura
+        })
+        
+        novoItem.produtoDescricao = produtoSelecionadoPortaCorrer.descricao
+        novoItem.valorTotalUnitario = valorFinalPortaCorrer
+        novoItem.valorTotal = valorFinalPortaCorrer * novoItem.quantidade
+        break
+
       case ProdutoTipo.TELA:
         let produtoSelecionadoTela = tipoProdutoSelecionado?.produtos.filter((x) => x.id === novoItem.produto)[0]
         let valorFinalTela = tipoProdutoSelecionado.functionCalcularValorFinal({

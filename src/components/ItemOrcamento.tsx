@@ -139,7 +139,7 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                   </div>
                   {
                     (
-                      tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
+                      tipoProdutoSelecionado.tipo === ProdutoTipo.PORTACORRER || tipoProdutoSelecionado.tipo === ProdutoTipo.PORTAABRIR || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
                       tipoProdutoSelecionado.tipo === ProdutoTipo.BASCULAS || tipoProdutoSelecionado.tipo === ProdutoTipo.BOX || tipoProdutoSelecionado.tipo === ProdutoTipo.BOXTETO || 
                       tipoProdutoSelecionado.tipo === ProdutoTipo.FECHAMENTO
                     ) &&
@@ -151,7 +151,7 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                     </div>
                   }
                   {
-                    tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA &&
+                    (tipoProdutoSelecionado.tipo === ProdutoTipo.PORTACORRER || tipoProdutoSelecionado.tipo === ProdutoTipo.PORTAABRIR) &&
                     <>
                       <div className='col'>
                         <span className="p-float-label">
@@ -193,7 +193,7 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                   }
                   {
                     (
-                      tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
+                      tipoProdutoSelecionado.tipo === ProdutoTipo.PORTACORRER || tipoProdutoSelecionado.tipo === ProdutoTipo.PORTAABRIR || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
                       tipoProdutoSelecionado.tipo === ProdutoTipo.CORRIMAO || tipoProdutoSelecionado.tipo === ProdutoTipo.GUARDACORPO || tipoProdutoSelecionado.tipo === ProdutoTipo.TELA
                     ) &&
                     <div className='col'>
@@ -234,7 +234,7 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                     </div>
                     {
                       (
-                        tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
+                        tipoProdutoSelecionado.tipo === ProdutoTipo.PORTACORRER || tipoProdutoSelecionado.tipo === ProdutoTipo.PORTAABRIR || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
                         tipoProdutoSelecionado.tipo === ProdutoTipo.BASCULAS || tipoProdutoSelecionado.tipo === ProdutoTipo.BOX || tipoProdutoSelecionado.tipo === ProdutoTipo.BOXTETO || 
                         tipoProdutoSelecionado.tipo === ProdutoTipo.FECHAMENTO
                       ) &&
@@ -243,7 +243,7 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                       </div>
                     }
                     {
-                      tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA &&
+                      (tipoProdutoSelecionado.tipo === ProdutoTipo.PORTACORRER || tipoProdutoSelecionado.tipo === ProdutoTipo.PORTAABRIR) &&
                       <>
                         <div className='col-6 flex gap-1 align-items-center'>
                           <RxLineHeight /> <span><b>Altura painel:</b> {localItem.alturaPainel} mm</span>
@@ -261,7 +261,7 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                     </div>
                     {
                       (
-                        tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
+                        tipoProdutoSelecionado.tipo === ProdutoTipo.PORTACORRER || tipoProdutoSelecionado.tipo === ProdutoTipo.PORTAABRIR || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
                         tipoProdutoSelecionado.tipo === ProdutoTipo.CORRIMAO || tipoProdutoSelecionado.tipo === ProdutoTipo.GUARDACORPO || tipoProdutoSelecionado.tipo === ProdutoTipo.TELA
                       ) &&
                       <div className='col-6 flex gap-1 align-items-center'>

@@ -1,0 +1,16 @@
+export interface IParamsCalculoPortaCorrer {
+  altura: number,
+  largura: number,
+  custoVidro: number,
+  valorFerragem: number,
+  constanteMultiplicadora: number,
+  multiplicadorAltura: number,
+  multiplicadorLargura: number,
+  constanteSomadoraAltura: number,
+  constanteSomadoraLargura: number,
+  maoDeObra: number,
+  valorDeslocamento: number,
+  valorPc: number,
+  valorPlotagem: number,
+  valorPainel: number,
+}

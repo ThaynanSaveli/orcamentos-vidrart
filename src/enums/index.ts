@@ -1,6 +1,7 @@
 export const ProdutoTipo = {
   JANELA: "janela",
-  PORTA: "porta",
+  PORTACORRER: "portaCorrer",
+  PORTAABRIR: "portaAbrir",
   FIXOS: "fixos",
   BASCULAS: "basculas",
   BOX: "box",
