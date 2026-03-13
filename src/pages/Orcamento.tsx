@@ -20,6 +20,7 @@ export const Orcamento = () => {
   const [porcentagemDescontoPix, setPorcentagemDescontoPix] = useState<number>(5);
   const [valorDescontoManual, setValorDescontoManual] = useState<number>(0);
   const [itensOrcamento, setItensOrcamento] = useState<IItemOrcamento[]>([])
+  const [preencheuItem, setPreencheuItem] = useState<boolean>(true);
 
   addLocale('pt', {
     firstDayOfWeek: 1,
@@ -39,6 +40,7 @@ export const Orcamento = () => {
       id: uuidv4(),
       tipoProduto: null,
       produto: null,
+      tipoProdutoDescricao: '',
       produtoDescricao: '',
       corAluminio: '',
       quantidade: 1,
@@ -49,19 +51,23 @@ export const Orcamento = () => {
       plotagem: 0,
       alturaPainel: 0,
       deslocamento: 0,
+      acrescimo: 0,
       valorTotalUnitario: 0,
       valorTotal: 0,
     })
 
     setItensOrcamento(arr)
+    setPreencheuItem(false)
   }
 
   const handleRemoverItemOrcamento = (id: string) => {
+    setPreencheuItem(true)
     setItensOrcamento(prev => prev.filter(item => item.id !== id));
   };
 
   const handleAtualizarItemOrcamento = (id: string, novoItem: IItemOrcamento) => {
     let tipoProdutoSelecionado = TIPOS_PRODUTOS.filter((x) => x.id === novoItem.tipoProduto)[0]
+    novoItem.tipoProdutoDescricao = tipoProdutoSelecionado.descricao
     
     switch (tipoProdutoSelecionado.tipo) {
       case ProdutoTipo.JANELA:
@@ -84,7 +90,7 @@ export const Orcamento = () => {
         novoItem.valorTotalUnitario = valorFinal
         novoItem.valorTotal = valorFinal * novoItem.quantidade
         break
-        
+
       case ProdutoTipo.TELA:
         let produtoSelecionadoTela = tipoProdutoSelecionado?.produtos.filter((x) => x.id === novoItem.produto)[0]
         let valorFinalTela = tipoProdutoSelecionado.functionCalcularValorFinal({
@@ -98,8 +104,24 @@ export const Orcamento = () => {
         novoItem.valorTotalUnitario = valorFinalTela
         novoItem.valorTotal = valorFinalTela * novoItem.quantidade
         break
+
+      case ProdutoTipo.ESQUADRIA:
+        let produtoSelecionadoEsquadria = tipoProdutoSelecionado?.produtos.filter((x) => x.id === novoItem.produto)[0]
+        let valorFinalEsquadria = tipoProdutoSelecionado.functionCalcularValorFinal({
+          altura: novoItem.altura,
+          largura: novoItem.largura,
+          acrescimo: novoItem.acrescimo,
+          deslocamento: novoItem.deslocamento,
+          constanteCalculo: produtoSelecionadoEsquadria.constanteCalculo
+        })
+        
+        novoItem.produtoDescricao = produtoSelecionadoEsquadria.descricao
+        novoItem.valorTotalUnitario = valorFinalEsquadria
+        novoItem.valorTotal = valorFinalEsquadria * novoItem.quantidade
+        break
     }
 
+    setPreencheuItem(true)
     setItensOrcamento(prev =>
       prev.map(item => (item.id === id ? novoItem : item))
     );
@@ -147,7 +169,7 @@ export const Orcamento = () => {
 
           <div className='mt-5'>
             <div className='text-center'>
-              <Button size='small' icon="pi pi-cart-plus" label="Adicionar produto" onClick={handleAdicionarItemOrcamento} />
+              <Button size='small' icon="pi pi-cart-plus" label="Adicionar produto" disabled={!preencheuItem} onClick={handleAdicionarItemOrcamento} />
             </div>
             <div className='grid mt-4 container-itens-orcamento'>
               {itensOrcamento.map((item) => (

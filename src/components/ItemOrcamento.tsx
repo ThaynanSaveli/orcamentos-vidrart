@@ -110,7 +110,12 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                   <label>Produto</label>
                 </span>
               </div>
-              <div className='col-8 mb-4'></div>
+              <div className='col-8 mb-4'>
+                {
+                  !(tipoProdutoSelecionado && tipoProdutoSelecionado.id && produtoSelecionado) &&
+                  <Button size='small' className='text-white' icon="pi pi-trash" severity="danger" aria-label="remove" style={{ height: '40px'}} onClick={() => removerItem(item.id)} />
+                }
+              </div>
               {
                 tipoProdutoSelecionado && tipoProdutoSelecionado.id && produtoSelecionado &&
                 <>
@@ -132,12 +137,19 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                       <label htmlFor="altura">Largura (mm)</label>
                     </span>
                   </div>
-                  <div className='col'>
-                    <span className="p-float-label">
-                      <InputText className='w-100' type="number" value={localItem.pc.toString()} onChange={(e) => handleChange('pc', e.target.value)} placeholder="PC" />
-                      <label htmlFor="altura">PC (mm)</label>
-                    </span>
-                  </div>
+                  {
+                    (
+                      tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
+                      tipoProdutoSelecionado.tipo === ProdutoTipo.BASCULAS || tipoProdutoSelecionado.tipo === ProdutoTipo.BOX || tipoProdutoSelecionado.tipo === ProdutoTipo.BOXTETO || 
+                      tipoProdutoSelecionado.tipo === ProdutoTipo.FECHAMENTO
+                    ) &&
+                    <div className='col'>
+                      <span className="p-float-label">
+                        <InputText className='w-100' type="number" value={localItem.pc.toString()} onChange={(e) => handleChange('pc', e.target.value)} placeholder="PC" />
+                        <label htmlFor="altura">PC (mm)</label>
+                      </span>
+                    </div>
+                  }
                   {
                     tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA &&
                     <>
@@ -155,41 +167,61 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                       </div>
                     </>
                   }
-                  <div className='col'>
-                    <span className="p-float-label">
-                      <InputNumber className='w-100' inputId="currency-us" value={localItem.maoDeObra} onValueChange={(e) => handleChange('maoDeObra', e.target.value)} mode="currency" currency="BRL" locale="pt-BR" placeholder="Valor da mão de obra" />
-                      <label htmlFor="mao_de_obra">Mão de obra</label>
-                    </span>
-                  </div>
+                  {
+                    tipoProdutoSelecionado.tipo !== ProdutoTipo.ESQUADRIA &&
+                    <div className='col'>
+                      <span className="p-float-label">
+                        <InputNumber className='w-100' inputId="currency-us" value={localItem.maoDeObra} onValueChange={(e) => handleChange('maoDeObra', e.target.value)} mode="currency" currency="BRL" locale="pt-BR" placeholder="Valor da mão de obra" />
+                        <label htmlFor="mao_de_obra">Mão de obra</label>
+                      </span>
+                    </div>
+                  }
                   <div className='col'>
                     <span className="p-float-label">
                       <InputNumber className='w-100' inputId="currency-us" value={localItem.deslocamento} onValueChange={(e) => handleChange('deslocamento', e.target.value)} mode="currency" currency="BRL" locale="pt-BR" placeholder="Valor do deslocamento" />
                       <label htmlFor="deslocamento">Deslocamento</label>
                     </span>
                   </div>
-                  <div className='col'>
-                    <span className="p-float-label">
-                      <InputText className='w-100' type='text' value={localItem.corAluminio} onChange={(e) => handleChange('corAluminio', e.target.value)} placeholder="Cor do alumínio" />
-                      <label htmlFor="corAluminio">Cor alumínio</label>
-                    </span>
-                  </div>
+                  {
+                    tipoProdutoSelecionado.tipo === ProdutoTipo.ESQUADRIA &&
+                    <div className='col'>
+                      <span className="p-float-label">
+                        <InputNumber className='w-100' inputId="currency-us" value={localItem.acrescimo} onValueChange={(e) => handleChange('acrescimo', e.target.value)} mode="currency" currency="BRL" locale="pt-BR" placeholder="Valor do acréscimo" />
+                        <label htmlFor="acrescimo">Acréscimo</label>
+                      </span>
+                    </div>
+                  }
+                  {
+                    (
+                      tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
+                      tipoProdutoSelecionado.tipo === ProdutoTipo.CORRIMAO || tipoProdutoSelecionado.tipo === ProdutoTipo.GUARDACORPO || tipoProdutoSelecionado.tipo === ProdutoTipo.TELA
+                    ) &&
+                    <div className='col'>
+                      <span className="p-float-label">
+                        <InputText className='w-100' type='text' value={localItem.corAluminio} onChange={(e) => handleChange('corAluminio', e.target.value)} placeholder="Cor do alumínio" />
+                        <label htmlFor="corAluminio">Cor alumínio</label>
+                      </span>
+                    </div>
+                  }
                 </>
               }
               <div className='flex gap-2 align-items-center'>
                 {
                   localItem.tipoProduto &&
-                  <Button size='small' className='text-white' icon="pi pi-check" severity='success' aria-label="Filter" style={{ height: '40px'}} onClick={salvarAlteracoes} />
+                  <>
+                    <Button size='small' className='text-white' icon="pi pi-check" severity='success' aria-label="Filter" style={{ height: '40px'}} onClick={salvarAlteracoes} />
+                    <Button size='small' className='text-white' icon="pi pi-trash" severity="danger" aria-label="remove" style={{ height: '40px'}} onClick={() => removerItem(item.id)} />
+                  </>
                 }
-                <Button size='small' className='text-white' icon="pi pi-trash" severity="danger" aria-label="remove" style={{ height: '40px'}} onClick={() => removerItem(item.id)} />
               </div>
             </div>
           </div>
         ) : (
           <>
             {
-              localItem && localItem.tipoProduto &&
+              localItem && localItem.tipoProduto && localItem.produto &&
               <div className='col-3'>
-                <Card title={localItem.produtoDescricao}>
+                <Card title={localItem.tipoProdutoDescricao + ' - ' + localItem.produtoDescricao}>
                   <div className='grid font-14'>
                     <div className='col-6 flex gap-1 align-items-center'>
                       <TbNumber123 /> <span><b>Quantidade:</b> {localItem.quantidade}</span>
@@ -200,9 +232,16 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                     <div className='col-6 flex gap-1 align-items-center'>
                       <RxWidth /> <span><b>Largura:</b> {localItem.largura} mm</span>
                     </div>
-                    <div className='col-6 flex gap-1 align-items-center'>
-                      <RiComputerLine /> <span><b>PC:</b> {localItem.pc} mm</span>
-                    </div>
+                    {
+                      (
+                        tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
+                        tipoProdutoSelecionado.tipo === ProdutoTipo.BASCULAS || tipoProdutoSelecionado.tipo === ProdutoTipo.BOX || tipoProdutoSelecionado.tipo === ProdutoTipo.BOXTETO || 
+                        tipoProdutoSelecionado.tipo === ProdutoTipo.FECHAMENTO
+                      ) &&
+                      <div className='col-6 flex gap-1 align-items-center'>
+                        <RiComputerLine /> <span><b>PC:</b> {localItem.pc} mm</span>
+                      </div>
+                    }
                     {
                       tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA &&
                       <>
@@ -220,9 +259,15 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                     <div className='col-6 flex gap-1 align-items-center'>
                       <GiRoad /> <span><b>Deslocamento:</b> R$ {formatReal(localItem.deslocamento.toFixed(2))}</span>
                     </div>
-                    <div className='col-6 flex gap-1 align-items-center'>
-                      <IoMdColorPalette /> <span><b>Cor do alumínio:</b> {localItem.corAluminio ?? '-'}</span>
-                    </div>
+                    {
+                      (
+                        tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA || tipoProdutoSelecionado.tipo === ProdutoTipo.JANELA || tipoProdutoSelecionado.tipo === ProdutoTipo.FIXOS || 
+                        tipoProdutoSelecionado.tipo === ProdutoTipo.CORRIMAO || tipoProdutoSelecionado.tipo === ProdutoTipo.GUARDACORPO || tipoProdutoSelecionado.tipo === ProdutoTipo.TELA
+                      ) &&
+                      <div className='col-6 flex gap-1 align-items-center'>
+                        <IoMdColorPalette /> <span><b>Cor do alumínio:</b> {localItem.corAluminio ?? '-'}</span>
+                      </div>
+                    }
                     <div className='col-6 flex gap-1 align-items-center'>
                       <MdOutlineAttachMoney /> <span><b>Valor Total:</b> R$ {formatReal(localItem.valorTotal.toFixed(2))}</span>
                     </div>

@@ -5,6 +5,7 @@ export const ProdutoTipo = {
   BASCULAS: "basculas",
   BOX: "box",
   BOXTETO: "boxTeto",
+  REPOSICAO: "reposicao",
   TAMPO: "tampo",
   GUARDACORPO: "guardaCorpo",
   CORRIMAO: "corrimao",

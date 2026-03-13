@@ -2,161 +2,10 @@ import { ProdutoTipo } from "../enums"
 import type { IProdutoPadrao } from "../models/IProdutoPadrao"
 import type { ITipoEsquadria } from "../models/ITipoEsquadria"
 import type { ITipoJanela } from "../models/ITipoJanela"
-import type { ITipoVidro } from "../models/ITipoVidro"
 import type { ProdutoTipoUnion } from "../models/ITypeUnion"
+import { calcularValorFinalEsquadria } from "../utils/math/esquadria"
 import { calcularValorFinalJanela } from "../utils/math/janela"
 import { calcularValorFinalTela } from "../utils/math/tela"
-
-export const TIPOS_VIDRO: ITipoVidro[] = [
-  {
-    id: 1,
-    descricao: "VIDRO INCOLOR 6MM",
-    valorCusto: 175,
-  },
-  {
-    id: 2,
-    descricao: "VIDRO INCOLOR 8MM",
-    valorCusto: 210,
-  },
-  {
-    id: 3,
-    descricao: "VIDRO INCOLOR 10MM",
-    valorCusto: 300,
-  },
-  {
-    id: 4,
-    descricao: "VIDRO VERDE 6MM",
-    valorCusto: 215,
-  },
-  {
-    id: 5,
-    descricao: "VIDRO VERDE 8MM",
-    valorCusto: 265,
-  },
-  {
-    id: 6,
-    descricao: "VIDRO VERDE 10MM",
-    valorCusto: 320,
-  },
-  {
-    id: 7,
-    descricao: "VIDRO FUMÊ 6MM",
-    valorCusto: 215,
-  },
-  {
-    id: 8,
-    descricao: "VIDRO FUMÊ 8MM",
-    valorCusto: 265,
-  },
-  {
-    id: 9,
-    descricao: "VIDRO FUMÊ 10MM",
-    valorCusto: 320,
-  },
-]
-
-export const TIPOS_GRUPO: any[] = [
-  {
-    id: 1,
-    descricao: "JANELA DUAS FOLHAS SUPREMA",
-    tipoGrupo: 'janela',
-    tiposAluminio: ["Tipo 1", "Tipo 2"],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 0,
-    multiplicadorAluminioLargura: 0,
-  },
-  {
-    id: 2,
-    descricao: "JANELA DUAS FOLHAS TEMPERADO",
-    tipoGrupo: 'janela',
-    tiposAluminio: ["Tipo 1", "Tipo 2"],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 40,
-    multiplicadorAluminioLargura: 70,
-  },
-  {
-    id: 3,
-    descricao: "JANELA VE3",
-    tipoGrupo: 'janela',
-    tiposAluminio: ["Tipo 1", "Tipo 2"],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 45,
-    multiplicadorAluminioLargura: 200,  
-  },
-  {
-    id: 4,
-    descricao: "JANELA VE6",
-    tipoGrupo: 'janela',
-    tiposAluminio: ["Tipo 1", "Tipo 2"],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 45,
-    multiplicadorAluminioLargura: 200,
-  },
-  {
-    id: 5,
-    descricao: "PORTA DE CORRER P1",
-    tipoGrupo: 'porta',
-    tiposAluminio: ["Tipo 1", "Tipo 2"],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 0, //conta diferente para calcular o valor do aluminio
-    multiplicadorAluminioLargura: 0,
-  },
-  {
-    id: 6,
-    descricao: "PORTA DE CORRER P2",
-    tipoGrupo: 'porta',
-    tiposAluminio: ["Tipo 1", "Tipo 2"],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 50,
-    multiplicadorAluminioLargura: 70,
-  },
-  {
-    id: 7,
-    descricao: "PORTA DE CORRER P4",
-    tipoGrupo: 'porta',
-    tiposAluminio: ["Tipo 1", "Tipo 2"],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 50,
-    multiplicadorAluminioLargura: 70,
-  },
-  {
-    id: 8,
-    descricao: "PORTA DE CORRER VE2",
-    tipoGrupo: 'porta',
-    tiposAluminio: ["Tipo 1", "Tipo 2"],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 50,
-    multiplicadorAluminioLargura: 200,
-  },
-  {
-    id: 9,
-    descricao: "PORTA DE CORRER VE3",
-    tipoGrupo: 'porta',
-    tiposAluminio: ["Tipo 1", "Tipo 2"],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 50,
-    multiplicadorAluminioLargura: 200,
-  },
-  {
-    id: 10,
-    descricao: "PORTA DE CORRER VE6",
-    tipoGrupo: 'porta',
-    tiposAluminio: ["Tipo 1", "Tipo 2"],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 50,
-    multiplicadorAluminioLargura: 200,
-  },
-  {
-    id: 11,
-    descricao: "ESQUADRIA",
-    tipoGrupo: 'esquadria',
-    tiposAluminio: [],
-    corAluminio: "",
-    multiplicadorAluminioAltura: 50,
-    multiplicadorAluminioLargura: 200,
-  },
-]
-
 
 //novos consts
 export const TIPOS_JANELA: ITipoJanela[] = [
@@ -433,7 +282,7 @@ export const TIPOS_PRODUTOS: ProdutoTipoUnion[] = [
   // {
   //   id: 10, 
   //   descricao: "Box reposição",
-  //   tipo: "box",
+  //   tipo: "reposicao",
   //   produtos: [],
   //   functionCalcularValorFinal: () => console.log('teste')
   // },
@@ -493,11 +342,11 @@ export const TIPOS_PRODUTOS: ProdutoTipoUnion[] = [
   //   produtos: [],
   //   functionCalcularValorFinal: () => console.log('teste')
   // },
-  // {
-  //   id: 19, 
-  //   descricao: "Esquadria",
-  //   tipo: "esquadria",
-  //   produtos: TIPOS_ESQUADRIA,
-  //   functionCalcularValorFinal: () => console.log('teste')
-  // },
+  {
+    id: 19, 
+    descricao: "Esquadria",
+    tipo: ProdutoTipo.ESQUADRIA,
+    produtos: TIPOS_ESQUADRIA,
+    functionCalcularValorFinal: calcularValorFinalEsquadria
+  },
 ]

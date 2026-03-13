@@ -1,8 +1,8 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import type { IItemOrcamento } from '../models/IItemOrcamento';
-import { TIPOS_GRUPO, TIPOS_VIDRO } from '../constants';
 import { formatReal } from '.';
+import { TIPOS_PRODUTOS } from '../constants';
 
 (pdfMake as any).vfs = pdfFonts.vfs;
 
@@ -57,12 +57,12 @@ export const gerarPDFOrcamento = (
       { text: 'Valor Total', style: 'tableHeader', alignment: 'right' },
     ],
     ...itens.map(item => {
-      const grupoItem = TIPOS_GRUPO.find(p => p.id === item.grupo);
-      const vidroItem = TIPOS_VIDRO.find(p => p.id === item.tipoProduto);
+      const tipoProdutoItem = TIPOS_PRODUTOS.find(p => p.id === item.tipoProduto);
+      const produtoItem = tipoProdutoItem?.produtos.find(p => p.id === item.produto);
 
       const descricao = [
-        `${grupoItem?.descricao || 'Produto'} - ${vidroItem?.descricao || ''}`,
-        `Vidro: ${vidroItem?.descricao || 'N/A'}`,
+        `${tipoProdutoItem?.descricao || 'Produto'} - ${produtoItem?.descricao || ''}`,
+        `Vidro: ${produtoItem?.descricao || 'N/A'}`,
         `Cor do alumínio: ${item.corAluminio || 'N/A'}`,
         `Largura: ${item.largura}mm | Altura: ${item.altura}mm`
       ].join('\n');
@@ -78,13 +78,13 @@ export const gerarPDFOrcamento = (
 
   // Criar tabela de detalhamento de valores (breakdown)
   const criarTabelaDetalhamento = (item: IItemOrcamento) => {
-    const grupoItem = TIPOS_GRUPO.find(p => p.id === item.grupo);
-    const vidroItem = TIPOS_VIDRO.find(p => p.id === item.tipoProduto);
+    const tipoProdutoItem = TIPOS_PRODUTOS.find(p => p.id === item.tipoProduto);
+    const produtoItem = tipoProdutoItem?.produtos.find(p => p.id === item.produto);
 
     // Construir o body da tabela
     const bodyBreakdown: any[] = [
       [
-        { text: `${grupoItem?.descricao || 'Produto'} - ${vidroItem?.descricao || ''}`, style: 'breakdownHeader', colSpan: 2 },
+        { text: `${tipoProdutoItem?.descricao || 'Produto'} - ${produtoItem?.descricao || ''}`, style: 'breakdownHeader', colSpan: 2 },
         {}
       ],
     ];
