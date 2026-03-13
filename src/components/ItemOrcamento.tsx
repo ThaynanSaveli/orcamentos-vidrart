@@ -5,31 +5,34 @@ import { InputText } from 'primereact/inputtext';
 import { useEffect, useState } from 'react';
 import type { IParamsItemOrcamento } from '../models/IParamsItemOrcamento';
 import type { IItemOrcamento } from '../models/IItemOrcamento';
-import { TIPOS_GRUPO, TIPOS_VIDRO } from '../constants';
+import { TIPOS_PRODUTOS } from '../constants';
 import { AutoComplete } from 'primereact/autocomplete';
 import { InputNumber } from 'primereact/inputnumber';
 import { Card } from 'primereact/card';
 import { RxLineHeight, RxWidth } from "react-icons/rx";
 import { GiRoad } from 'react-icons/gi';
-import { MdHeight } from 'react-icons/md';
+import { MdHeight, MdOutlineAttachMoney } from 'react-icons/md';
 import { RiComputerLine } from 'react-icons/ri';
 import { TbNumber123 } from 'react-icons/tb';
 import { LuScroll } from 'react-icons/lu';
 import { FaPersonDigging } from 'react-icons/fa6';
 import { IoMdColorPalette } from 'react-icons/io';
+import { formatReal } from '../utils';
+import type { ProdutoTipoUnion } from '../models/ITypeUnion';
+import { ProdutoTipo } from '../enums';
 
 export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrcamento) => {
   const [isEditing, setIsEditing] = useState<boolean>(true)
   const [localItem, setLocalItem] = useState<IItemOrcamento>(item);
-  const [gruposFiltered, setGruposFiltered] = useState<any[]>([]);
-  const [grupoSelecionado, setGrupoSelecionado] = useState({} as any);
+  const [tiposProdutoFiltered, setTipoProdutoFiltered] = useState<ProdutoTipoUnion[]>([]);
+  const [tipoProdutoSelecionado, setTipoProdutoSelecionado] = useState({} as any);
   const [produtosFiltered, setProdutosFiltered] = useState<any[]>([]);
-  const [produtoSelecionado, setProdutoSelecionado] = useState<any>('');
+  const [produtoSelecionado, setProdutoSelecionado] = useState<any>({} as any);
 
   const handleChange = (field: keyof IItemOrcamento, value: any) => {
     setLocalItem(prev => ({
       ...prev,
-      [field]: field === 'grupo' || field === 'tipoProduto' || field === 'quantidade' || field === 'altura' || field === 'largura' || field === 'maoDeObra' || field === 'pc' || field === 'deslocamento' || field === 'plotagem' || field === 'alturaPainel'
+      [field]: field === 'produto' || field === 'tipoProduto' || field === 'quantidade' || field === 'altura' || field === 'largura' || field === 'maoDeObra' || field === 'pc' || field === 'deslocamento' || field === 'plotagem' || field === 'alturaPainel'
         ? Number(value)
         : value,
     }));
@@ -40,34 +43,26 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
     setIsEditing(false);
   };
 
-  const searchGrupos = (event: { query: string }) => {
-    const filtered = TIPOS_GRUPO.filter(p => p.descricao.toLowerCase().includes(event.query.toLowerCase()));
-    setGruposFiltered(filtered);
+  const searchTipoProduto = (event: { query: string }) => {
+    const filtered = TIPOS_PRODUTOS.filter(p => p.descricao.toLowerCase().includes(event.query.toLowerCase()));
+    setTipoProdutoFiltered(filtered);
   };
 
   const searchProdutos = (event: { query: string }) => {
-    const filtered = TIPOS_VIDRO.filter(p => p.descricao.toLowerCase().includes(event.query.toLowerCase()));
+    const filtered = tipoProdutoSelecionado.produtos.filter((p: any) => p.descricao.toLowerCase().includes(event.query.toLowerCase()));
     setProdutosFiltered(filtered);
   };
 
   useEffect(() => {
-  setLocalItem(item);
+    setLocalItem(item);
 
-  // Se o item já tiver valores, preenche os selects com base nele
-  if (item.grupo) {
-    const grupo = TIPOS_GRUPO.find(g => g.id === item.grupo) || {} as any;
-    setGrupoSelecionado(grupo);
-  } else {
-    setGrupoSelecionado({} as any);
-  }
-
-  if (item.tipoProduto) {
-    const produto = TIPOS_VIDRO.find(p => p.id === item.tipoProduto) || '';
-    setProdutoSelecionado(produto);
-  } else {
-    setProdutoSelecionado('');
-  }
-}, [item]);
+    if (item.tipoProduto) {
+      const grupo = TIPOS_PRODUTOS.find(g => g.id === item.tipoProduto);
+      const produto = grupo?.produtos.find(p => p.id === item.produto);
+      setTipoProdutoSelecionado(grupo);
+      setProdutoSelecionado(produto);
+    }
+  }, [item]);
 
   return (
     <>
@@ -75,46 +70,53 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
         isEditing ? (
           <div className='col-12'>
             <div className='grid'>
-              <div className='col-2'>
+              <div className='col-2 mb-4'>
                 <span className="p-float-label">
                   <AutoComplete
                     className='w-100'
                     inputId="tipoProduto"
                     field="descricao"
-                    suggestions={gruposFiltered}
-                    completeMethod={searchGrupos}
-                    value={grupoSelecionado}
+                    dropdown
+                    suggestions={tiposProdutoFiltered}
+                    completeMethod={searchTipoProduto}
+                    value={tipoProdutoSelecionado}
                     onChange={(e) => {
                       if (e.value) {
-                        setGrupoSelecionado(e.value)
-                        handleChange('grupo', e.value.id);
+                        setTipoProdutoSelecionado(e.value)
+                        handleChange('tipoProduto', e.value.id);
+
+                        if (typeof e.value === 'object' && e.value.produtos.length === 1) {
+                          setProdutoSelecionado(e.value.produtos[0])
+                        }
                       }
                     }}
                   />
-                  <label>Grupo</label>
+                  <label>TIpo de produto</label>
                 </span>
               </div>
-              <div className='col-2'>
+              <div className='col-2 mb-4'>
                 <span className="p-float-label">
                   <AutoComplete
                     className='w-100'
-                    inputId="tipoProduto"
+                    inputId="produto"
                     field="descricao"
-                    disabled={grupoSelecionado.id ? false : true}
+                    dropdown
+                    disabled={tipoProdutoSelecionado.id ? false : true}
                     suggestions={produtosFiltered}
                     completeMethod={searchProdutos}
                     value={produtoSelecionado}
                     onChange={(e) => setProdutoSelecionado(e.value)} // apenas atualiza o estado
                     onSelect={(e) => {
                       setProdutoSelecionado(e.value);
-                      handleChange('tipoProduto', e.value.id);
+                      handleChange('produto', e.value.id);
                     }}
                   />
-                  <label>Tipo de produto</label>
+                  <label>Produto</label>
                 </span>
               </div>
+              <div className='col-8 mb-4'></div>
               {
-                localItem.tipoProduto !== null &&
+                tipoProdutoSelecionado && tipoProdutoSelecionado.id && produtoSelecionado &&
                 <>
                   <div className='col'>
                     <span className="p-float-label">
@@ -141,7 +143,7 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                     </span>
                   </div>
                   {
-                    grupoSelecionado.tipoGrupo === 'porta' &&
+                    tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA &&
                     <>
                       <div className='col'>
                         <span className="p-float-label">
@@ -191,8 +193,8 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
             {
               localItem && localItem.tipoProduto &&
               <div className='col-3'>
-                <Card title={`${TIPOS_GRUPO.find(x => x.id === localItem.grupo)?.descricao} - ${TIPOS_VIDRO.find(x => x.id === localItem.tipoProduto)?.descricao}`}>
-                  <div className='grid'>
+                <Card title={localItem.produtoDescricao}>
+                  <div className='grid font-14'>
                     <div className='col-6 flex gap-1 align-items-center'>
                       <TbNumber123 /> <span><b>Quantidade:</b> {localItem.quantidade}</span>
                     </div>
@@ -206,7 +208,7 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                       <RiComputerLine /> <span><b>PC:</b> {localItem.pc} mm</span>
                     </div>
                     {
-                      grupoSelecionado.tipoGrupo === 'porta' &&
+                      tipoProdutoSelecionado.tipo === ProdutoTipo.PORTA &&
                       <>
                         <div className='col-6 flex gap-1 align-items-center'>
                           <RxLineHeight /> <span><b>Altura painel:</b> {localItem.alturaPainel} mm</span>
@@ -217,13 +219,16 @@ export const ItemOrcamento = ({item, removerItem, atualizarItem}: IParamsItemOrc
                       </>
                     }
                     <div className='col-6 flex gap-1 align-items-center'>
-                      <FaPersonDigging /> <span><b>Mão de obra:</b> R$ {localItem.maoDeObra.toFixed(2)}</span>
+                      <FaPersonDigging /> <span><b>Mão de obra:</b> R$ {formatReal(localItem.maoDeObra.toFixed(2))}</span>
                     </div>
                     <div className='col-6 flex gap-1 align-items-center'>
-                      <GiRoad /> <span><b>Deslocamento:</b> R$ {localItem.deslocamento.toFixed(2)}</span>
+                      <GiRoad /> <span><b>Deslocamento:</b> R$ {formatReal(localItem.deslocamento.toFixed(2))}</span>
                     </div>
                     <div className='col-6 flex gap-1 align-items-center'>
-                      <IoMdColorPalette /> <span><b>Cor do alumínio:</b> {localItem.corAluminio}</span>
+                      <IoMdColorPalette /> <span><b>Cor do alumínio:</b> {localItem.corAluminio ?? '-'}</span>
+                    </div>
+                    <div className='col-6 flex gap-1 align-items-center'>
+                      <MdOutlineAttachMoney /> <span><b>Valor Total:</b> R$ {formatReal(localItem.valorTotal.toFixed(2))}</span>
                     </div>
                     <div className='col-12'>
                       <div className='flex gap-2 justify-content-center align-items-end'>

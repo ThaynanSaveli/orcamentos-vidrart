@@ -1,7 +1,8 @@
 export interface IItemOrcamento {
   id: string;
-  grupo: number | null;
   tipoProduto: number | null;
+  produto: number | null;
+  produtoDescricao: string;
   quantidade: number;
   altura: number;
   largura: number;
@@ -10,12 +11,6 @@ export interface IItemOrcamento {
   plotagem: number;
   alturaPainel: number;
   maoDeObra: number;
-  valorPc: number;
-  valorVidro: number;
-  valorAluminio: number;
-  valorFerragem: number;
-  valorPlotagem: number;
-  valorPainel: number;
   deslocamento: number;
   valorTotalUnitario: number
   valorTotal: number

@@ -10,8 +10,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { gerarPDFOrcamento } from '../utils/gerarPDF';
 import { ToastService } from '../services/toast';
 import { InputNumber } from 'primereact/inputnumber';
-import { TIPOS_GRUPO, TIPOS_VIDRO } from '../constants';
-import { calcularTributacao, calcularValorAluminioJanelaEPorta, calcularValorFerragem, calcularValorPainel, calcularValorPC, calcularValorPlotagem, calcularValorVidro } from '../utils';
+import { TIPOS_PRODUTOS } from '../constants';
+import { ProdutoTipo } from '../enums';
 
 export const Orcamento = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -37,28 +37,22 @@ export const Orcamento = () => {
     let arr = [...itensOrcamento]
     arr.unshift({
       id: uuidv4(),
-      grupo: null,
       tipoProduto: null,
+      produto: null,
+      produtoDescricao: '',
       corAluminio: '',
       quantidade: 1,
       altura: 0,
       largura: 0,
       pc: 0,
       maoDeObra: 0,
-      valorAluminio: 0,
-      valorFerragem: 0,
-      valorPc: 0,
       plotagem: 0,
-      valorVidro: 0,
-      valorPlotagem: 0,
       alturaPainel: 0,
-      valorPainel: 0,
       deslocamento: 0,
       valorTotalUnitario: 0,
       valorTotal: 0,
     })
 
-    console.log('arr', arr)
     setItensOrcamento(arr)
   }
 
@@ -67,26 +61,31 @@ export const Orcamento = () => {
   };
 
   const handleAtualizarItemOrcamento = (id: string, novoItem: IItemOrcamento) => {
-    let grupoSelecionado = TIPOS_GRUPO.find((x) => x.id === novoItem.grupo)
-    let vidroSelecionado = TIPOS_VIDRO.find((x) => x.id === novoItem.tipoProduto)
+    let tipoProdutoSelecionado = TIPOS_PRODUTOS.filter((x) => x.id === novoItem.tipoProduto)[0]
+    
+    switch (tipoProdutoSelecionado.tipo) {
+      case ProdutoTipo.JANELA:
+        let produtoSelecionado = tipoProdutoSelecionado?.produtos.filter((x) => x.id === novoItem.produto)[0]
 
-    novoItem.valorVidro = calcularValorVidro(novoItem.altura, novoItem.largura, vidroSelecionado?.valorCusto ?? 0, vidroSelecionado?.id ?? 0, grupoSelecionado?.id ?? 0)
-    novoItem.valorPc = calcularValorPC(novoItem.pc)
-    novoItem.valorPainel = calcularValorPainel(novoItem.alturaPainel, novoItem.largura)
-    novoItem.valorPlotagem = calcularValorPlotagem(novoItem.plotagem)
-    novoItem.valorFerragem = calcularValorFerragem(vidroSelecionado?.id ?? 0, grupoSelecionado?.id ?? 0)
+        let valorFinal = tipoProdutoSelecionado.functionCalcularValorFinal({
+          altura: novoItem.altura,
+          largura: novoItem.largura,
+          valorPc: novoItem.pc,
+          maoDeObra: novoItem.maoDeObra,
+          valorDeslocamento: novoItem.deslocamento,
+          valorFerragem: produtoSelecionado.valorFerragem,
+          multiplicadorAltura: produtoSelecionado?.multiplicadorAltura,
+          multiplicadorLargura: produtoSelecionado?.multiplicadorLargura,
+          constanteCalculoVidro: produtoSelecionado?.constanteCalculoVidro,
+          custoVidro: produtoSelecionado?.custoVidro
+        })
+        
+        novoItem.produtoDescricao = produtoSelecionado.descricao
+        novoItem.valorTotalUnitario = valorFinal
+        novoItem.valorTotal = valorFinal * novoItem.quantidade
 
-    if (grupoSelecionado.id < 10) {
-      novoItem.valorAluminio = calcularValorAluminioJanelaEPorta(novoItem.altura, novoItem.largura, grupoSelecionado.multiplicadorAluminioAltura, grupoSelecionado.multiplicadorAluminioLargura)
+        break
     }
-
-    let valorTributacao = calcularTributacao(novoItem.valorAluminio, novoItem.valorFerragem, novoItem.maoDeObra, novoItem.valorVidro)
-
-    let valorTotalUnitario = novoItem.maoDeObra + novoItem.valorAluminio + novoItem.valorFerragem + novoItem.valorVidro + novoItem.valorPc + 
-    novoItem.valorPainel + novoItem.valorPlotagem + novoItem.deslocamento + valorTributacao
-
-    novoItem.valorTotalUnitario = valorTotalUnitario
-    novoItem.valorTotal = novoItem.quantidade * valorTotalUnitario
 
     setItensOrcamento(prev =>
       prev.map(item => (item.id === id ? novoItem : item))
